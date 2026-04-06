@@ -1020,6 +1020,123 @@ body { display: flex; flex-direction: column; }
 .fp-body { flex: 1; min-height: 0; }
 .fp-content { height: 100%; overflow-y: auto; }
 
+
+/* ── MOBILE RESPONSIVE (< 768px) ───────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Hide desktop sidebar */
+  .fp-sidebar { display: none !important; }
+
+  /* Full width content */
+  .fp-body { flex-direction: column; }
+  .fp-content { padding: 16px; padding-bottom: 80px; /* space for bottom bar */ }
+
+  /* Bottom navigation bar */
+  .mobile-nav {
+    display: flex !important;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    z-index: 200;
+    padding: 0;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .mobile-nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 4px;
+    cursor: pointer;
+    color: var(--text-dim);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    font-family: var(--font-display);
+    gap: 3px;
+    border: none;
+    background: none;
+    transition: color .15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mobile-nav-item.active { color: var(--accent); }
+  .mobile-nav-item .mobile-nav-icon { font-size: 20px; line-height: 1; }
+
+  /* More panel (slides up) */
+  .mobile-more-panel {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-radius: 20px 20px 0 0;
+    z-index: 400;
+    padding: 16px;
+    padding-bottom: calc(16px + env(safe-area-inset-bottom));
+    transform: translateY(100%);
+    transition: transform .25s ease;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+  .mobile-more-panel.open { transform: translateY(0); }
+  .mobile-more-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,.4);
+    z-index: 390; display: none;
+  }
+  .mobile-more-overlay.open { display: block; }
+  .mobile-more-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .mobile-more-item {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    padding: 12px 4px; border-radius: 10px; background: var(--bg3);
+    cursor: pointer; border: none; color: var(--text-dim);
+    font-size: 10px; font-weight: 700; letter-spacing: .5px;
+    font-family: var(--font-display); text-align: center;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mobile-more-item:active { background: var(--bg); }
+  .mobile-more-item span:first-child { font-size: 22px; }
+  .mobile-more-handle {
+    width: 40px; height: 4px; background: var(--border);
+    border-radius: 2px; margin: 0 auto 12px; 
+  }
+
+  /* Dashboard: single column */
+  .dash-layout { grid-template-columns: 1fr !important; }
+
+  /* Sync bar: compact on mobile */
+  .sync-bar { padding: 5px 10px; }
+  .sync-bar span.sync-status { font-size: 10px; }
+
+  /* Larger touch targets */
+  .sched-card-check { width: 22px !important; height: 22px !important; font-size: 13px !important; }
+  .quick-due-btn { min-width: 36px; min-height: 36px; }
+  .timer-btn { min-height: 32px; }
+
+  /* Block cards: full width */
+  .block-progress-card { margin-bottom: 12px; }
+
+  /* Section headings */
+  .section-heading { font-size: 18px; }
+
+  /* Week view: scroll horizontal */
+  #weekView { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+}
+
+/* Hide mobile nav on desktop */
+.mobile-nav { display: none; }
+.mobile-more-panel { display: none; }
+.mobile-more-overlay { display: none; }
+
+@media (max-width: 768px) {
+  .mobile-more-panel { display: block; }
+  .mobile-more-overlay { display: block; }
+}
+
 </style>
 </head>
 <body class="fullpage-mode">
@@ -6380,5 +6497,46 @@ document.addEventListener('DOMContentLoaded', () => {
   if (typeof bindGistSync === 'function') bindGistSync();
 });
 </script>
+
+<!-- MOBILE BOTTOM NAV -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-nav-item active" data-panel="dash">
+    <span class="mobile-nav-icon">🏠</span>DASH
+  </button>
+  <button class="mobile-nav-item" data-panel="today">
+    <span class="mobile-nav-icon">📋</span>TODAY
+  </button>
+  <button class="mobile-nav-item" data-panel="blocks">
+    <span class="mobile-nav-icon">⚡</span>BLOCKS
+  </button>
+  <button class="mobile-nav-item" data-panel="capture">
+    <span class="mobile-nav-icon">💡</span>CAPTURE
+  </button>
+  <button class="mobile-nav-item" id="mobileMoreBtn">
+    <span class="mobile-nav-icon">⋯</span>MORE
+  </button>
+</div>
+
+<!-- MOBILE MORE OVERLAY -->
+<div class="mobile-more-overlay" id="mobileMoreOverlay"></div>
+
+<!-- MOBILE MORE PANEL -->
+<div class="mobile-more-panel" id="mobileMorePanel">
+  <div class="mobile-more-handle"></div>
+  <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:var(--text-dim);margin-bottom:12px;">MORE PAGES</div>
+  <div class="mobile-more-grid">
+    <button class="mobile-more-item" data-panel="week"><span>📅</span>WEEK</button>
+    <button class="mobile-more-item" data-panel="habits"><span>🔥</span>HABITS</button>
+    <button class="mobile-more-item" data-panel="wins"><span>🏆</span>WINS</button>
+    <button class="mobile-more-item" data-panel="done"><span>✅</span>DONE</button>
+    <button class="mobile-more-item" data-panel="review"><span>📊</span>REVIEW</button>
+    <button class="mobile-more-item" data-panel="wheel"><span>🎯</span>WHEEL</button>
+    <button class="mobile-more-item" data-panel="opa"><span>🔄</span>OPA</button>
+    <button class="mobile-more-item" data-panel="plan"><span>🗓</span>PLAN</button>
+    <button class="mobile-more-item" data-panel="notif"><span>🔔</span>NOTIF</button>
+    <button class="mobile-more-item" data-panel="export"><span>⬇</span>EXPORT</button>
+  </div>
+</div>
+
 </body>
 </html>
