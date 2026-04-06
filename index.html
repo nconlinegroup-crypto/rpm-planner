@@ -2811,51 +2811,7 @@ function notifyBadgeStop(key) {
 }
 
 // Listen for sync messages from background (another page started/stopped a timer)
-// chrome.runtime.onMessage.addListener((msg) => {
-  if (msg.type === 'TIMER_SYNC_START') {
-    // Another page started a timer — sync our local timerState
-    const key = msg.key;
-    if (key && (!timerState[key] || !timerState[key].intervalId)) {
-      const elapsed = Date.now() - msg.startMs;
-      if (timerState[key]) timerState[key].elapsed = elapsed;
-      else timerState[key] = { elapsed, startMs: msg.startMs, intervalId: null };
-      // Start the visual ticker locally
-      timerState[key].startMs = Date.now();
-      timerState[key].elapsed = elapsed;
-      timerState[key].intervalId = setInterval(() => refreshTimerDisplay(key), 1000);
-      refreshTimerDisplay(key);
-    }
-  } else if (msg.type === 'TIMER_SYNC_STOP') {
-    const key = msg.key;
-    if (key && timerState[key]) {
-      if (timerState[key].intervalId) {
-        clearInterval(timerState[key].intervalId);
-        timerState[key].elapsed += Date.now() - timerState[key].startMs;
-        timerState[key].intervalId = null;
-      }
-      refreshTimerDisplay(key);
-    }
-  }
-});
-
-// On page load, query background for any running timer
-try {
-  // PWA: no timer query needed
-} catch(e) {}
-// chrome.runtime.onMessage.addListener((msg) => {
-  if (msg.type === 'TIMER_SYNC_REPLY' && msg.timer && msg.timer.running) {
-    const { key, startMs, label } = msg.timer;
-    if (key && !timerState[key]?.intervalId) {
-      const elapsed = Date.now() - startMs;
-      timerState[key] = {
-        elapsed,
-        startMs: Date.now(),
-        intervalId: setInterval(() => refreshTimerDisplay(key), 1000)
-      };
-      refreshTimerDisplay(key);
-    }
-  }
-});
+// PWA: timer sync via localStorage only — no cross-tab messaging needed
 
 // ── IMPORT ────────────────────────────────────────────────────────────────────
 function bindImport() {
