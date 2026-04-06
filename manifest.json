@@ -1,0 +1,14 @@
+{
+  "name": "RPM Planner — Tony Robbins Method",
+  "short_name": "RPM Planner",
+  "description": "Result-Purpose-Massive Action Plan life planner",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#1a1714",
+  "theme_color": "#1a1714",
+  "orientation": "any",
+  "icons": [
+    { "src": "icon192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
