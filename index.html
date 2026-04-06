@@ -1137,6 +1137,39 @@ body { display: flex; flex-direction: column; }
   .mobile-more-overlay { display: block; }
 }
 
+
+/* ── MOBILE MODAL FIXES ─────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .modal-overlay {
+    padding: 12px !important;
+    align-items: flex-start !important;
+    padding-top: 16px !important;
+    overflow-y: auto;
+  }
+  .modal {
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: calc(100vh - 32px) !important;
+    overflow-y: auto !important;
+    border-radius: 12px !important;
+  }
+  body.fullpage-mode .modal {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  /* Priming modal specifically */
+  #primingOverlay .modal {
+    max-height: calc(100vh - 32px) !important;
+    overflow-y: auto !important;
+  }
+  /* Make priming textareas smaller on mobile */
+  .priming-ta { font-size: 14px !important; }
+  .priming-slider { width: 100% !important; }
+  /* Modal footer buttons */
+  .modal-footer { flex-wrap: wrap !important; gap: 8px !important; }
+  .modal-footer-left { flex-wrap: wrap !important; }
+}
+
 </style>
 </head>
 <body class="fullpage-mode">
@@ -1714,8 +1747,8 @@ body { display: flex; flex-direction: column; }
 
 <script src="app.js"></script>
 <!-- PRIMING MODAL -->
-<div id="primingOverlay" class="modal-overlay" style="z-index:600;background:rgba(0,0,0,.75);">
-  <div class="modal" style="max-width:520px;max-height:90vh;overflow-y:auto;">
+<div id="primingOverlay" class="modal-overlay" style="z-index:600;background:rgba(0,0,0,.75);overflow-y:auto;">
+  <div class="modal" style="max-width:520px;max-height:calc(100vh - 32px);overflow-y:auto;width:100%;">
     <div class="modal-header" style="border-bottom:2px solid var(--accent);">
       <div class="modal-title" style="color:var(--accent);">🌅 MORNING PRIMING</div>
     </div>
@@ -1734,7 +1767,7 @@ body { display: flex; flex-direction: column; }
         <div style="flex:1;min-width:120px;"><div style="font-size:11px;color:var(--text-dim);margin-bottom:4px;">EMOTION</div><input type="range" id="primingEmotion" min="1" max="10" value="7" class="priming-slider"><div id="primingEmotionVal" style="font-size:12px;font-weight:700;color:var(--accent);text-align:center;">7</div></div>
       </div>
       <button class="btn-primary full-width" id="primingDoneBtn" style="margin-top:20px;font-size:14px;padding:14px;">LETS GO — START MY DAY</button>
-      <button class="btn-ghost full-width" id="primingSkipBtn" style="margin-top:8px;font-size:11px;">Skip today</button>
+      <button class="btn-ghost full-width" id="primingSkipBtn" style="margin-top:8px;font-size:14px;padding:12px;">Skip today</button>
     </div>
   </div>
 </div>
