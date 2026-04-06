@@ -5265,6 +5265,8 @@ function renderPlanningMode() {
   });
 })();
 
+// ── INIT (deferred until DOM ready) ─────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function() {
 // ── INIT ──────────────────────────────────────────────────────────────────────
 updateDate();
 bindDayPicker();
@@ -5295,6 +5297,7 @@ load(()=>{
     // Show morning priming on first open of the day
     setTimeout(maybeShowPriming, 800);
   });
+});
 });
 
 </script>
@@ -6272,15 +6275,17 @@ body.light .priming-ta{background:#fff;border-color:#d8d3cc;}
 
 
 <script>
+// Service worker for offline support
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW reg failed:', err));
   });
-  // Bind Gist sync after DOM loaded
-  window.addEventListener('DOMContentLoaded', () => {
-    if (typeof bindGistSync === 'function') bindGistSync();
-  });
 }
+
+// Always bind Gist sync UI on DOM ready (independent of SW)
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof bindGistSync === 'function') bindGistSync();
+});
 </script>
 </body>
 </html>
