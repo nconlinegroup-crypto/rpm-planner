@@ -1987,7 +1987,42 @@ if ('Notification' in window && Notification.permission === 'default') {
 }
 
 // Bind gist sync when DOM ready
-document.addEventListener("DOMContentLoaded", function() { if(typeof bindGistSync==="function") bindGistSync(); });
+document.addEventListener("DOMContentLoaded", function() {
+  if(typeof bindGistSync==="function") bindGistSync();
+
+  // ── MOBILE NAV ──────────────────────────────────────────────────────────
+  document.querySelectorAll('.mobile-nav-item[data-panel]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.mobile-nav-item').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      switchTo(btn.dataset.panel);
+    });
+  });
+
+  const moreBtn     = document.getElementById('mobileMoreBtn');
+  const morePanel   = document.getElementById('mobileMorePanel');
+  const moreOverlay = document.getElementById('mobileMoreOverlay');
+
+  if (moreBtn && morePanel && moreOverlay) {
+    moreBtn.addEventListener('click', () => {
+      morePanel.classList.add('open');
+      moreOverlay.classList.add('open');
+    });
+    moreOverlay.addEventListener('click', () => {
+      morePanel.classList.remove('open');
+      moreOverlay.classList.remove('open');
+    });
+    document.querySelectorAll('.mobile-more-item[data-panel]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        morePanel.classList.remove('open');
+        moreOverlay.classList.remove('open');
+        document.querySelectorAll('.mobile-nav-item').forEach(b => b.classList.remove('active'));
+        switchTo(btn.dataset.panel);
+      });
+    });
+  }
+});
+
 
 
 </script>
