@@ -1037,7 +1037,7 @@ body { display: flex; flex-direction: column; }
     bottom: 0; left: 0; right: 0;
     background: var(--bg2);
     border-top: 1px solid var(--border);
-    z-index: 500;
+    z-index: 200;
     padding: 0;
     padding-bottom: env(safe-area-inset-bottom);
   }
@@ -1989,40 +1989,31 @@ if ('Notification' in window && Notification.permission === 'default') {
 // Bind gist sync when DOM ready
 document.addEventListener("DOMContentLoaded", function() {
   if(typeof bindGistSync==="function") bindGistSync();
-
-  // ── MOBILE NAV ──────────────────────────────────────────────────────────
-  document.querySelectorAll('.mobile-nav-item[data-panel]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.mobile-nav-item').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      switchTo(btn.dataset.panel);
-    });
-  });
-
-  const moreBtn     = document.getElementById('mobileMoreBtn');
-  const morePanel   = document.getElementById('mobileMorePanel');
-  const moreOverlay = document.getElementById('mobileMoreOverlay');
-
-  if (moreBtn && morePanel && moreOverlay) {
-    moreBtn.addEventListener('click', () => {
-      morePanel.classList.add('open');
-      moreOverlay.classList.add('open');
-    });
-    moreOverlay.addEventListener('click', () => {
-      morePanel.classList.remove('open');
-      moreOverlay.classList.remove('open');
-    });
-    document.querySelectorAll('.mobile-more-item[data-panel]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        morePanel.classList.remove('open');
-        moreOverlay.classList.remove('open');
-        document.querySelectorAll('.mobile-nav-item').forEach(b => b.classList.remove('active'));
-        switchTo(btn.dataset.panel);
-      });
-    });
+  // Auto-pull on load if configured
+  const { token, gistId } = gistGetCredentials();
+  if (token && gistId) {
+    console.log('[AutoSync PWA] Auto-pulling on load...');
+    gistPull().catch(e => console.log('[AutoSync PWA] Auto-pull failed:', e.message));
   }
 });
 
+// Auto-push: hook into pwaStorage.set to detect changes
+const _origSet = pwaStorage.set.bind(pwaStorage);
+let _pwaSyncTimer = null;
+pwaStorage.set = function(obj, cb) {
+  _origSet(obj, cb);
+  // Only auto-push rpmState changes (not timers, primed dates etc.)
+  if ('rpmState' in obj) {
+    if (_pwaSyncTimer) clearTimeout(_pwaSyncTimer);
+    _pwaSyncTimer = setTimeout(() => {
+      const { token, gistId } = gistGetCredentials();
+      if (token && gistId) {
+        console.log('[AutoSync PWA] Auto-pushing after change...');
+        gistPush().catch(e => console.log('[AutoSync PWA] Auto-push failed:', e.message));
+      }
+    }, 8000);
+  }
+};
 
 
 </script>
