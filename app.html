@@ -1151,26 +1151,22 @@ body { display: flex; flex-direction: column; }
 
 /* ── STANDALONE MODE safe areas ─────────────────────────────────────────────── */
 @media (display-mode: standalone) {
-  /* Push everything below the status bar */
-  body {
-    padding-top: env(safe-area-inset-top);
-    background-color: #1a1714;
-  }
-  /* Nav above home indicator */
-  .mobile-nav {
-    padding-bottom: env(safe-area-inset-bottom) !important;
-  }
-  /* Sync bar doesn't need extra padding since body handles it */
+  /* Sync bar absorbs the status bar height */
   .sync-bar {
-    padding-top: 6px !important;
+    padding-top: max(12px, env(safe-area-inset-top)) !important;
+  }
+  /* Nav sits above home indicator */
+  .mobile-nav {
+    bottom: 0 !important;
+    padding-bottom: max(8px, env(safe-area-inset-bottom)) !important;
+  }
+  /* Content clears the taller nav */
+  .fp-content {
+    padding-bottom: 100px !important;
   }
 }
 
-/* ── Safari browser mode (not standalone) ───────────────────────────────────── */
-@supports (-webkit-touch-callout: none) and (not (display-mode: standalone)) {
-  .mobile-nav { bottom: 82px; }
-  .fp-content { padding-bottom: 180px !important; }
-}
+/* Safari browser mode: nav sits at bottom edge, content has enough padding */
 
 /* Hide mobile elements on desktop */
 .mobile-nav { display: none; }
