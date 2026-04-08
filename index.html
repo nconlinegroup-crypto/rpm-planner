@@ -2015,6 +2015,32 @@ document.addEventListener("DOMContentLoaded", function() {
     console.log('[AutoSync PWA] Auto-pulling on load...');
     gistPull().catch(e => console.log('[AutoSync PWA] Auto-pull failed:', e.message));
   }
+
+  // ── MOBILE NAV BINDING ────────────────────────────────────────────────────
+  document.querySelectorAll('.mobile-nav-item[data-panel]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (typeof switchTo === 'function') switchTo(btn.dataset.panel);
+      document.querySelectorAll('.mobile-nav-item').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  const moreBtn     = document.getElementById('mobileMoreBtn');
+  const morePanel   = document.getElementById('mobileMorePanel');
+  const moreOverlay = document.getElementById('mobileMoreOverlay');
+  const openMore    = () => { morePanel?.classList.add('open'); moreOverlay?.classList.add('open'); };
+  const closeMore   = () => { morePanel?.classList.remove('open'); moreOverlay?.classList.remove('open'); };
+
+  if (moreBtn) moreBtn.addEventListener('click', openMore);
+  if (moreOverlay) moreOverlay.addEventListener('click', closeMore);
+
+  document.querySelectorAll('.mobile-more-item[data-panel]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (typeof switchTo === 'function') switchTo(btn.dataset.panel);
+      closeMore();
+      document.querySelectorAll('.mobile-nav-item').forEach(b => b.classList.remove('active'));
+    });
+  });
 });
 
 // Auto-push: hook into pwaStorage.set to detect changes
