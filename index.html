@@ -1059,7 +1059,7 @@ body { display: flex; flex-direction: column; }
     background: var(--bg2);
     border-top: 1px solid var(--border);
     z-index: 9000;
-    padding: 0 0 env(safe-area-inset-bottom) 0;
+    padding: 0;
     pointer-events: all;
     touch-action: manipulation;
   }
@@ -1155,10 +1155,10 @@ body { display: flex; flex-direction: column; }
   .sync-bar {
     padding-top: max(12px, env(safe-area-inset-top)) !important;
   }
-  /* Nav sits above home indicator */
+  /* Nav at bottom edge - home indicator sits on top which is correct iOS UX */
   .mobile-nav {
     bottom: 0 !important;
-    padding-bottom: max(8px, env(safe-area-inset-bottom)) !important;
+    padding-bottom: 0 !important;
   }
   /* Content clears the taller nav */
   .fp-content {
