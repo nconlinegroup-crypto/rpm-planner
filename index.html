@@ -11,6 +11,7 @@
 <meta name="apple-mobile-web-app-title" content="RPM Planner">
 <meta name="theme-color" content="#1a1714">
 <title>RPM Planner</title>
+<!-- BUILD: 2026-04-07 13:34:26 -->
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon512.png">
 <style>
@@ -6537,8 +6538,12 @@ load(()=>{
 
 </script>
 <script>
+// Unregister any old service workers and clear caches
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+  navigator.serviceWorker.getRegistrations().then(regs => {
+    regs.forEach(r => r.unregister());
+  });
+  caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
 }
 document.addEventListener('DOMContentLoaded', () => {
   if (typeof bindGistSync === 'function') bindGistSync();
