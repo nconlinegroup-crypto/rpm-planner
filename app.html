@@ -594,7 +594,7 @@ body.light .fp-nav-item.active {
 }
 
 /* ── DASHBOARD ─────────────────────────────────────────────────────────────── */
-.dash-layout{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.dash-layout{display:grid;grid-template-columns:1fr 1fr;gap:20px;overflow:visible}
 body.popup-mode .dash-layout{grid-template-columns:1fr}
 .dash-section-title{font-family:var(--font-display);font-size:13px;letter-spacing:2.5px;color:var(--text-muted);margin-bottom:12px}
 
@@ -852,7 +852,7 @@ body.light .qd-popover{background:#fff;border-color:#e2ddd7;box-shadow:0 8px 24p
 .habit-day-dot:hover{border-color:var(--accent);}
 
 /* ── 3-COLUMN DASHBOARD ────────────────────────────────────────────────────── */
-.dash-layout{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.dash-layout{display:grid;grid-template-columns:1fr 1fr;gap:20px;overflow:visible}
 body.popup-mode .dash-layout{grid-template-columns:1fr}
 /* In full page, add 3rd col for habits */
 body.fullpage-mode .dash-layout{grid-template-columns:1fr 1fr minmax(220px,280px)}
@@ -1028,12 +1028,28 @@ body { display: flex; flex-direction: column; }
 
 /* ── MOBILE RESPONSIVE (< 768px) ───────────────────────────────────────────── */
 @media (max-width: 768px) {
-  /* Hide desktop sidebar */
-  .fp-sidebar { display: none !important; }
 
-  /* Full width content */
-  .fp-body { flex-direction: column; overflow: visible; }
-  .fp-content { padding: 16px; padding-bottom: 100px; overflow-y: auto; -webkit-overflow-scrolling: touch; height: auto; flex: 1; min-height: 0; }
+  /* Layout */
+  .fp-sidebar { display: none !important; }
+  .fp-body { flex-direction: column; overflow: visible !important; }
+  
+  /* Content area - key: no height constraint, just scroll */
+  .fp-content {
+    padding: 16px;
+    padding-bottom: 120px;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    height: auto !important;
+    min-height: 0;
+    flex: 1;
+  }
+
+  /* Dashboard single column */
+  .dash-layout { 
+    grid-template-columns: 1fr !important; 
+    overflow: visible !important;
+    height: auto !important;
+  }
 
   /* Bottom navigation bar */
   .mobile-nav {
@@ -1043,21 +1059,9 @@ body { display: flex; flex-direction: column; }
     background: var(--bg2);
     border-top: 1px solid var(--border);
     z-index: 9000;
-    padding: 0;
-    padding-bottom: env(safe-area-inset-bottom);
+    padding: 0 0 env(safe-area-inset-bottom) 0;
     pointer-events: all;
     touch-action: manipulation;
-  }
-  .mobile-nav-item {
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: rgba(240,165,0,0.2);
-    cursor: pointer;
-    pointer-events: all;
-  }
-  /* Standalone mode: nav sits at bottom edge */
-  @media (display-mode: standalone) {
-    .mobile-nav { bottom: 0; }
-    .fp-content { padding-bottom: 90px; }
   }
   .mobile-nav-item {
     flex: 1;
@@ -1083,32 +1087,32 @@ body { display: flex; flex-direction: column; }
   .mobile-nav-item.active { color: var(--accent); }
   .mobile-nav-item .mobile-nav-icon { font-size: 20px; line-height: 1; }
 
-  /* More panel (slides up) */
+  /* More panel */
   .mobile-more-panel {
     position: fixed;
     bottom: 0; left: 0; right: 0;
     background: var(--bg2);
     border-top: 1px solid var(--border);
     border-radius: 20px 20px 0 0;
-    z-index: 400;
+    z-index: 9500;
     padding: 16px;
     padding-bottom: calc(16px + env(safe-area-inset-bottom));
     transform: translateY(100%);
     transition: transform .25s ease;
-    max-height: 70vh;
-    overflow-y: auto;
+    display: block;
   }
   .mobile-more-panel.open { transform: translateY(0); }
-  .mobile-more-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,.4);
-    z-index: 390; display: none;
+  .mobile-more-overlay { 
+    position: fixed; inset: 0; 
+    background: rgba(0,0,0,.4);
+    z-index: 9400; 
+    display: none;
   }
   .mobile-more-overlay.open { display: block; }
   .mobile-more-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-    margin-top: 8px;
+    gap: 8px; margin-top: 8px;
   }
   .mobile-more-item {
     display: flex; flex-direction: column; align-items: center; gap: 4px;
@@ -1116,79 +1120,60 @@ body { display: flex; flex-direction: column; }
     cursor: pointer; border: none; color: var(--text-dim);
     font-size: 10px; font-weight: 700; letter-spacing: .5px;
     font-family: var(--font-display); text-align: center;
-    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
   }
-  .mobile-more-item:active { background: var(--bg); }
   .mobile-more-item span:first-child { font-size: 22px; }
   .mobile-more-handle {
     width: 40px; height: 4px; background: var(--border);
-    border-radius: 2px; margin: 0 auto 12px; 
+    border-radius: 2px; margin: 0 auto 12px;
   }
 
-  /* Dashboard: single column */
-  .dash-layout { grid-template-columns: 1fr !important; }
-
-  /* Sync bar: compact on mobile */
+  /* Sync bar */
   .sync-bar { padding: 5px 10px; }
-  .sync-bar span.sync-status { font-size: 10px; }
 
-  /* Larger touch targets */
-  .sched-card-check { width: 22px !important; height: 22px !important; font-size: 13px !important; }
-  .quick-due-btn { min-width: 36px; min-height: 36px; }
-  .timer-btn { min-height: 32px; }
-
-  /* Block cards: full width */
-  .block-progress-card { margin-bottom: 12px; }
-
-  /* Section headings */
-  .section-heading { font-size: 18px; }
-
-  /* Week view: scroll horizontal */
-  #weekView { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-}
-
-/* Hide mobile nav on desktop */
-.mobile-nav { display: none; }
-.mobile-more-panel { display: none; }
-.mobile-more-overlay { display: none; }
-
-@media (max-width: 768px) {
-  .mobile-more-panel { display: block; }
-  .mobile-more-overlay { display: none; pointer-events: none; /* only shows when .open is added */ } .mobile-more-overlay.open { pointer-events: all; }
-}
-
-
-/* ── MOBILE MODAL FIXES ─────────────────────────────────────────────────────── */
-@media (max-width: 768px) {
+  /* Modals */
   .modal-overlay {
     padding: 12px !important;
     align-items: flex-start !important;
     padding-top: 16px !important;
     overflow-y: auto;
   }
-  .modal {
+  .modal, body.fullpage-mode .modal {
     width: 100% !important;
     max-width: 100% !important;
     max-height: calc(100vh - 32px) !important;
     overflow-y: auto !important;
     border-radius: 12px !important;
   }
-  body.fullpage-mode .modal {
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-  /* Priming modal specifically */
-  #primingOverlay .modal {
-    max-height: calc(100vh - 32px) !important;
-    overflow-y: auto !important;
-  }
-  /* Make priming textareas smaller on mobile */
-  .priming-ta { font-size: 14px !important; }
-  .priming-slider { width: 100% !important; }
-  /* Modal footer buttons */
   .modal-footer { flex-wrap: wrap !important; gap: 8px !important; }
   .modal-footer-left { flex-wrap: wrap !important; }
 }
+
+/* ── STANDALONE MODE safe areas ─────────────────────────────────────────────── */
+@media (display-mode: standalone) {
+  /* Push everything below the status bar */
+  body {
+    padding-top: env(safe-area-inset-top);
+    background-color: #1a1714;
+  }
+  /* Nav above home indicator */
+  .mobile-nav {
+    padding-bottom: env(safe-area-inset-bottom) !important;
+  }
+  /* Sync bar doesn't need extra padding since body handles it */
+  .sync-bar {
+    padding-top: 6px !important;
+  }
+}
+
+/* ── Safari browser mode (not standalone) ───────────────────────────────────── */
+@supports (-webkit-touch-callout: none) and (not (display-mode: standalone)) {
+  .mobile-nav { bottom: 82px; }
+  .fp-content { padding-bottom: 180px !important; }
+}
+
+/* Hide mobile elements on desktop */
+.mobile-nav { display: none; }
 
 </style>
 </head>
