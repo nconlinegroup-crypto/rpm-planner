@@ -19,6 +19,7 @@
 
 
 
+
 /* ── DARK THEME ─────────────────────────────────────────────────────────────── */
 :root {
   --bg: #0d0d0f; --bg2: #161619; --bg3: #1e1e24; --border: #2e2e3a;
@@ -1195,6 +1196,7 @@ body { display: flex; flex-direction: column; }
 
 
 
+
 </style>
 </head>
 <body class="fullpage-mode">
@@ -1239,7 +1241,8 @@ body { display: flex; flex-direction: column; }
     <div class="fp-header-right">
       <button class="btn-ghost" id="newBlockBtn">+ NEW BLOCK</button>
       <button class="btn-ghost" id="quickTaskOpenBtn" style="background:var(--accent);color:#000;border-color:var(--accent);">+ TASK</button>
-      <button class="btn-ghost" id="quickAddTaskOpenBtn" style="background:var(--accent);color:#000;border-color:var(--accent);">+ TASK</button>
+      
+      
       <button class="theme-toggle" id="themeToggle" title="Toggle theme">
         <span class="theme-icon-dark">☀️</span><span class="theme-icon-light">🌙</span>
       </button>
@@ -1845,7 +1848,75 @@ body { display: flex; flex-direction: column; }
     <button class="mobile-more-item" data-panel="export"><span>⬇</span>EXPORT</button>
   </div>
 </div>
+<!-- QUICK ADD TASK MODAL -->
+<div id="quickTaskModalOverlay" class="modal-overlay">
+  <div class="modal" style="max-width:460px;">
+    <div class="modal-header">
+      <div class="modal-title">+ QUICK TASK</div>
+      <button class="modal-close" id="quickTaskModalClose">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="text" id="quickTaskModalText" placeholder="e.g. Go shopping today at 1pm for 30 mins"
+        style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:10px 12px;font-size:13px;outline:none;box-sizing:border-box;margin-bottom:6px;font-family:var(--font-body);" />
+      <div id="quickTaskModalPreview" style="display:none;font-size:11px;color:var(--accent);margin-bottom:10px;padding:4px 2px;"></div>
+      <div class="add-extra-grid">
+        <div class="add-extra-group">
+          <div class="add-extra-label">DUE DATE</div>
+          <input type="date" class="add-extra-input" id="quickTaskModalDue" />
+        </div>
+        <div class="add-extra-group">
+          <div class="add-extra-label">TIME</div>
+          <input type="time" class="add-extra-input" id="quickTaskModalTime" />
+        </div>
+        <div class="add-extra-group">
+          <div class="add-extra-label">DURATION (MINS)</div>
+          <input type="number" class="add-extra-input" id="quickTaskModalDuration" min="5" step="5" placeholder="e.g. 60" />
+        </div>
+        <div class="add-extra-group">
+          <div class="add-extra-label">REPEAT</div>
+          <select class="add-extra-input" id="quickTaskModalRepeat">
+            <option value="">No repeat</option>
+            <option value="daily">Daily</option>
+            <option value="weekly">Weekly</option>
+            <option value="weekdays">Weekdays</option>
+            <option value="weekends">Weekends</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div style="padding:12px 16px;display:flex;justify-content:flex-end;gap:8px;border-top:1px solid var(--border);">
+      <button class="btn-ghost" id="quickTaskModalCancel">CANCEL</button>
+      <button class="btn-primary" id="quickTaskModalSave">ADD TASK</button>
+    </div>
+  </div>
+</div>
+<!-- MOBILE BOTTOM NAV -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-nav-item active" data-panel="dash"><span class="mobile-nav-icon">🏠</span>DASH</button>
+  <button class="mobile-nav-item" data-panel="today"><span class="mobile-nav-icon">📋</span>TODAY</button>
+  <button class="mobile-nav-item" data-panel="blocks"><span class="mobile-nav-icon">⚡</span>BLOCKS</button>
+  <button class="mobile-nav-item" data-panel="capture"><span class="mobile-nav-icon">💡</span>CAPTURE</button>
+  <button class="mobile-nav-item" id="mobileMoreBtn"><span class="mobile-nav-icon">⋯</span>MORE</button>
+</div>
+<div class="mobile-more-overlay" id="mobileMoreOverlay"></div>
+<div class="mobile-more-panel" id="mobileMorePanel">
+  <div class="mobile-more-handle"></div>
+  <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:var(--text-dim);margin-bottom:12px;">MORE PAGES</div>
+  <div class="mobile-more-grid">
+    <button class="mobile-more-item" data-panel="week"><span>📅</span>WEEK</button>
+    <button class="mobile-more-item" data-panel="habits"><span>🔥</span>HABITS</button>
+    <button class="mobile-more-item" data-panel="wins"><span>🏆</span>WINS</button>
+    <button class="mobile-more-item" data-panel="done"><span>✅</span>DONE</button>
+    <button class="mobile-more-item" data-panel="review"><span>📊</span>REVIEW</button>
+    <button class="mobile-more-item" data-panel="wheel"><span>🎯</span>WHEEL</button>
+    <button class="mobile-more-item" data-panel="opa"><span>🔄</span>OPA</button>
+    <button class="mobile-more-item" data-panel="plan"><span>🗓</span>PLAN</button>
+    <button class="mobile-more-item" data-panel="notif"><span>🔔</span>NOTIF</button>
+    <button class="mobile-more-item" data-panel="export"><span>⬇</span>EXPORT</button>
+  </div>
+</div>
 <script>
+
 
 
 
@@ -2127,6 +2198,7 @@ pwaStorage.set = function(obj, cb) {
 // Expose gist functions to app script stubs
 window._pwaGistPush = gistPush;
 window._pwaGistPull = gistPull;
+
 
 
 
@@ -3336,6 +3408,11 @@ const REPEAT_PATTERNS = [
   { re:/\bmon[.,\s]+wed[.,\s]+fri\b/i,    repeat:'mon-wed-fri' },
   { re:/\btue[s]?[.,\s]+thu[r]?[s]?\b/i, repeat:'tue-thu' },
 ];
+// Maps NL repeat values to <select> option values
+const REPEAT_CANONICAL = {
+  'daily':'daily', 'weekdays':'weekdays', 'weekends':'weekends',
+  'weekly':'weekly', 'mon-wed-fri':'mon-wed-fri', 'tue-thu':'tue-thu',
+};
 
 function parseNL(input) {
   const text = input.trim();
@@ -7076,7 +7153,35 @@ function bindQuickTaskModal() {
     if (timeEl) timeEl.value = '';
     if (durEl)  durEl.value  = '';
     if (repEl)  repEl.value  = '';
+    // Clear any NL preview
+    const preview = document.getElementById('quickTaskModalPreview');
+    if (preview) preview.style.display = 'none';
   };
+
+  // Live NL parse preview as user types
+  if (textEl) {
+    textEl.addEventListener('input', () => {
+      const preview = document.getElementById('quickTaskModalPreview');
+      if (!preview || !textEl.value.trim()) { if(preview) preview.style.display='none'; return; }
+      const parsed = parseNL(textEl.value);
+      const parts = [];
+      if (parsed.due)      parts.push(`📅 ${fmtDate(parsed.due)}`);
+      if (parsed.dueTime)  parts.push(`🕐 ${fmtTime(parsed.dueTime)}`);
+      if (parsed.duration) parts.push(`⏱ ${fmtDuration(parsed.duration)}`);
+      if (parsed.repeat)   parts.push(`🔁 ${fmtRepeatForDisplay(parsed.repeat, parsed.days)}`);
+      if (parts.length) {
+        preview.textContent = parts.join('  ·  ');
+        preview.style.display = 'block';
+      } else {
+        preview.style.display = 'none';
+      }
+      // Auto-fill fields from NL
+      if (dueEl  && parsed.due)      dueEl.value  = parsed.due;
+      if (timeEl && parsed.dueTime)  timeEl.value = parsed.dueTime;
+      if (durEl  && parsed.duration) durEl.value  = parsed.duration;
+      if (repEl  && parsed.repeat)   repEl.value  = REPEAT_CANONICAL[parsed.repeat] || parsed.repeat;
+    });
+  }
 
   if (openBtn)   openBtn.addEventListener('click', openModal);
   if (closeBtn)  closeBtn.addEventListener('click', closeModal);
@@ -7084,15 +7189,19 @@ function bindQuickTaskModal() {
   overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
 
   const doSave = () => {
-    const text = textEl?.value.trim();
-    if (!text) { textEl?.focus(); return; }
+    const raw = textEl?.value.trim();
+    if (!raw) { textEl?.focus(); return; }
+
+    // Parse NL for clean text + fields
+    const parsed = parseNL(raw);
+
     state.quickTasks.push({
-      text,
+      text:     parsed.text || raw,
       done:     false,
-      due:      dueEl?.value  || '',
-      dueTime:  timeEl?.value || '',
-      duration: +(durEl?.value || 0),
-      repeat:   repEl?.value  || '',
+      due:      dueEl?.value  || parsed.due      || '',
+      dueTime:  timeEl?.value || parsed.dueTime  || '',
+      duration: +(durEl?.value || parsed.duration || 0),
+      repeat:   repEl?.value  || parsed.repeat   || '',
       blockId:  '',
       notes:    '',
       subtasks: []
@@ -7150,6 +7259,7 @@ load(()=>{
 
 </script>
 <script>
+
 
 
 
@@ -7236,6 +7346,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Enter') qatSave?.click();
   });
 });
+
 
 
 
