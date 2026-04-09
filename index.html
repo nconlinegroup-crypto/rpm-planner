@@ -1234,6 +1234,7 @@ body { display: flex; flex-direction: column; }
     </div>
     <div class="fp-header-right">
       <button class="btn-ghost" id="newBlockBtn">+ NEW BLOCK</button>
+      <button class="btn-ghost" id="quickAddTaskOpenBtn" style="background:var(--accent);color:#000;border-color:var(--accent);">+ TASK</button>
       <button class="theme-toggle" id="themeToggle" title="Toggle theme">
         <span class="theme-icon-dark">☀️</span><span class="theme-icon-light">🌙</span>
       </button>
@@ -7055,10 +7056,118 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('.mobile-nav-item').forEach(b => b.classList.remove('active'));
     });
   });
+
+  // ── QUICK ADD TASK MODAL ────────────────────────────────────────────────────
+  const qatOverlay = document.getElementById('quickAddTaskOverlay');
+  const qatOpen    = document.getElementById('quickAddTaskOpenBtn');
+  const qatClose   = document.getElementById('quickAddTaskClose');
+  const qatSave    = document.getElementById('quickAddTaskSave');
+  const qatText    = document.getElementById('quickAddTaskText');
+  const qatDue     = document.getElementById('quickAddTaskDue');
+  const qatTime    = document.getElementById('quickAddTaskTime');
+
+  const openQAT  = () => { if(qatOverlay) { qatOverlay.style.display='block'; qatText?.focus(); } };
+  const closeQAT = () => { if(qatOverlay) { qatOverlay.style.display='none'; if(qatText) qatText.value=''; if(qatDue) qatDue.value=''; if(qatTime) qatTime.value=''; } };
+
+  if (qatOpen)  qatOpen.addEventListener('click', openQAT);
+  if (qatClose) qatClose.addEventListener('click', closeQAT);
+  if (qatOverlay) qatOverlay.addEventListener('click', e => { if(e.target===qatOverlay) closeQAT(); });
+
+  if (qatSave) qatSave.addEventListener('click', () => {
+    const text = qatText?.value.trim();
+    if (!text) return;
+    // Use the app's NL parser if text looks like NL, otherwise direct add
+    if (typeof state !== 'undefined' && typeof save === 'function') {
+      state.quickTasks.push({
+        text,
+        done: false,
+        due: qatDue?.value || '',
+        dueTime: qatTime?.value || '',
+        duration: 0,
+        blockId: '',
+        notes: '',
+        subtasks: []
+      });
+      save();
+      if (typeof renderDashboard === 'function') renderDashboard();
+      if (typeof renderToday === 'function') renderToday();
+      if (typeof showToast === 'function') showToast('Task added ✓');
+    }
+    closeQAT();
+  });
+
+  // Enter key in task input
+  if (qatText) qatText.addEventListener('keydown', e => {
+    if (e.key === 'Enter') qatSave?.click();
+  });
 });
 
 
 
 </script>
+
+<!-- MOBILE BOTTOM NAV -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-nav-item active" data-panel="dash">
+    <span class="mobile-nav-icon">🏠</span>DASH
+  </button>
+  <button class="mobile-nav-item" data-panel="today">
+    <span class="mobile-nav-icon">📋</span>TODAY
+  </button>
+  <button class="mobile-nav-item" data-panel="blocks">
+    <span class="mobile-nav-icon">⚡</span>BLOCKS
+  </button>
+  <button class="mobile-nav-item" data-panel="capture">
+    <span class="mobile-nav-icon">💡</span>CAPTURE
+  </button>
+  <button class="mobile-nav-item" id="mobileMoreBtn">
+    <span class="mobile-nav-icon">⋯</span>MORE
+  </button>
+</div>
+
+<!-- MOBILE MORE OVERLAY -->
+<div class="mobile-more-overlay" id="mobileMoreOverlay"></div>
+
+<!-- MOBILE MORE PANEL -->
+<div class="mobile-more-panel" id="mobileMorePanel">
+  <div class="mobile-more-handle"></div>
+  <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:var(--text-dim);margin-bottom:12px;">MORE PAGES</div>
+  <div class="mobile-more-grid">
+    <button class="mobile-more-item" data-panel="week"><span>📅</span>WEEK</button>
+    <button class="mobile-more-item" data-panel="habits"><span>🔥</span>HABITS</button>
+    <button class="mobile-more-item" data-panel="wins"><span>🏆</span>WINS</button>
+    <button class="mobile-more-item" data-panel="done"><span>✅</span>DONE</button>
+    <button class="mobile-more-item" data-panel="review"><span>📊</span>REVIEW</button>
+    <button class="mobile-more-item" data-panel="wheel"><span>🎯</span>WHEEL</button>
+    <button class="mobile-more-item" data-panel="opa"><span>🔄</span>OPA</button>
+    <button class="mobile-more-item" data-panel="plan"><span>🗓</span>PLAN</button>
+    <button class="mobile-more-item" data-panel="notif"><span>🔔</span>NOTIF</button>
+    <button class="mobile-more-item" data-panel="export"><span>⬇</span>EXPORT</button>
+  </div>
+</div>
+
+<!-- QUICK ADD TASK MODAL (mobile-friendly) -->
+<div id="quickAddTaskOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9100;padding:20px;box-sizing:border-box;overflow-y:auto;">
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px;max-width:500px;margin:0 auto;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <div style="font-size:13px;font-weight:700;letter-spacing:1.5px;color:var(--accent);">+ QUICK TASK</div>
+      <button id="quickAddTaskClose" style="background:none;border:none;color:var(--text-dim);font-size:18px;cursor:pointer;padding:0 4px;">✕</button>
+    </div>
+    <input type="text" id="quickAddTaskText" placeholder="e.g. Call dentist today at 2pm for 30 mins"
+      style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:10px 12px;font-size:13px;outline:none;box-sizing:border-box;margin-bottom:12px;font-family:var(--font-body);" />
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:var(--text-muted);margin-bottom:4px;">DUE DATE</div>
+        <input type="date" id="quickAddTaskDue" style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:7px;color:var(--text);padding:8px 10px;font-size:12px;outline:none;box-sizing:border-box;" />
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:1px;color:var(--text-muted);margin-bottom:4px;">TIME</div>
+        <input type="time" id="quickAddTaskTime" style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:7px;color:var(--text);padding:8px 10px;font-size:12px;outline:none;box-sizing:border-box;" />
+      </div>
+    </div>
+    <button id="quickAddTaskSave" style="width:100%;background:var(--accent);color:#000;border:none;border-radius:8px;padding:12px;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:1px;">ADD TASK</button>
+  </div>
+</div>
+
 </body>
 </html>
