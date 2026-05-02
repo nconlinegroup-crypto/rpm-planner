@@ -2069,7 +2069,7 @@ function pwaCheckNotifications() {
     const rpmState = JSON.parse(localStorage.getItem('rpm_rpmState') || '{}');
     if (!rpmState.blocks) return;
     const now = new Date();
-    const today = now.toISOString().split('T')[0];
+    const today = localISO(now);
     const nowMins = now.getHours() * 60 + now.getMinutes();
     const notified = JSON.parse(localStorage.getItem('rpm_rpmNotified') || '{}');
 
@@ -2460,7 +2460,13 @@ function dueCls(iso) {
 function repeatLabel(r) {
   return ({daily:'↻ Daily',weekly:'↻ Weekly','mon-wed-fri':'↻ M/W/F','tue-thu':'↻ T/Th',weekdays:'↻ Weekdays',weekends:'↻ Weekends',custom:'↻ Custom'})[r]||'';
 }
-function todayISO() { return new Date().toISOString().split('T')[0]; }
+function todayISO() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function localISO(d) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
 function nowLabel() {
   return new Date().toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
 }
@@ -2548,14 +2554,14 @@ function bindDayPicker() {
   prevBtn && prevBtn.addEventListener('click', () => {
     const d = new Date((selectedDate || todayISO())+'T00:00:00');
     d.setDate(d.getDate()-1);
-    selectedDate = d.toISOString().split('T')[0];
+    selectedDate = localISO(d);
     input.value = selectedDate;
     renderToday();
   });
   nextBtn && nextBtn.addEventListener('click', () => {
     const d = new Date((selectedDate || todayISO())+'T00:00:00');
     d.setDate(d.getDate()+1);
-    selectedDate = d.toISOString().split('T')[0];
+    selectedDate = localISO(d);
     input.value = selectedDate;
     renderToday();
   });
@@ -2796,7 +2802,7 @@ function buildScheduleRow(it) {
   let missedPill = '';
   if (isRecurring && it.blockId !== undefined && it.actionIdx !== undefined) {
     const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
-    const yIso = yesterday.toISOString().split('T')[0];
+    const yIso = localISO(yesterday);
     if (isRepeatActiveOnDate(it.repeat, yIso)) {
       const yKey = `${it.blockId}_${it.actionIdx}_${yIso}`;
       if (!state.actionCompletions[yKey]) {
@@ -3370,7 +3376,7 @@ function renderWeekView() {
   for (let d = 0; d < 7; d++) {
     const date = new Date();
     date.setDate(date.getDate() + d);
-    days.push(date.toISOString().split('T')[0]);
+    days.push(localISO(date));
   }
 
   const DAY_NAMES = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
@@ -3539,7 +3545,7 @@ function parseNL(input) {
 
   // ── DUE DATE: relative ────────────────────────────────────────────────────
   const todayDate = new Date(); todayDate.setHours(0,0,0,0);
-  const addDays = (d, n) => { const r = new Date(d); r.setDate(r.getDate()+n); return r.toISOString().split('T')[0]; };
+  const addDays = (d, n) => { const r = new Date(d); r.setDate(r.getDate()+n); return localISO(r); };
 
   if (/\btoday\b/i.test(text)) {
     result.due = todayISO();
@@ -4946,7 +4952,7 @@ function renderWeekCalendar() {
   for (let d = 0; d < weekDayCount; d++) {
     const date = new Date();
     date.setDate(date.getDate() + d);
-    days.push(date.toISOString().split('T')[0]);
+    days.push(localISO(date));
   }
   const allItems = days.flatMap(iso => getItemsForDate(iso).map(it => ({ ...it, _date: iso })));
   container.innerHTML = buildCalGrid(days, allItems);
@@ -5521,12 +5527,12 @@ function buildBlockProgressCard(block) {
       || (block.createdAt ? new Date(block.createdAt).toISOString().split('T')[0] : todayISO());
     const endISO = action.endDate
       || block.dueDate
-      || new Date(Date.now() + 90*86400000).toISOString().split('T')[0];
+      || localISO(new Date(Date.now() + 90*86400000));
     const cur = new Date(startISO + 'T00:00:00');
     const end = new Date(endISO + 'T00:00:00');
     let count = 0;
     while (cur <= end) {
-      if (isRepeatActiveOnDate(action.repeat, cur.toISOString().split('T')[0])) count++;
+      if (isRepeatActiveOnDate(action.repeat, localISO(cur))) count++;
       cur.setDate(cur.getDate() + 1);
     }
     return Math.max(1, count);
@@ -6144,15 +6150,15 @@ function bindQuickDueBtns(container) {
 
       const today = todayISO();
       const addDays = n => {
-        const d = new Date(today + 'T00:00:00'); d.setDate(d.getDate() + n);
-        return d.toISOString().split('T')[0];
+        const d = new Date(today + 'T12:00:00'); d.setDate(d.getDate() + n);
+        return localISO(d);
       };
       const nextWeekday = dow => {
-        const d = new Date(today + 'T00:00:00');
+        const d = new Date(today + 'T12:00:00');
         const cur = d.getDay();
         const diff = (dow - cur + 7) % 7 || 7;
         d.setDate(d.getDate() + diff);
-        return d.toISOString().split('T')[0];
+        return localISO(d);
       };
       // Weekend = next Saturday
       const weekend = nextWeekday(6);
@@ -6232,7 +6238,7 @@ function buildHabitTrackerHTML(daysBack) {
   const dates = [];
   for (let i = daysBack - 1; i >= 0; i--) {
     const d = new Date(); d.setDate(d.getDate() - i);
-    dates.push(d.toISOString().split('T')[0]);
+    dates.push(localISO(d));
   }
   const DAY_NAMES = ['Su','Mo','Tu','We','Th','Fr','Sa'];
 
@@ -6240,7 +6246,7 @@ function buildHabitTrackerHTML(daysBack) {
     let streak = 0;
     for (let i = 0; i < 365; i++) {
       const d = new Date(); d.setDate(d.getDate() - i);
-      const iso = d.toISOString().split('T')[0];
+      const iso = localISO(d);
       if (state.habitCompletions[`${habit.id}_${iso}`]) streak++;
       else break;
     }
@@ -6324,7 +6330,7 @@ function buildDashHabitsHTML() {
   const dates = [];
   for (let i = 6; i >= 0; i--) {
     const d = new Date(); d.setDate(d.getDate() - i);
-    dates.push(d.toISOString().split('T')[0]);
+    dates.push(localISO(d));
   }
   const DAY_NAMES = ['Su','Mo','Tu','We','Th','Fr','Sa'];
 
@@ -6345,7 +6351,7 @@ function buildDashHabitsHTML() {
     let streak = 0;
     for (let i = 0; i < 365; i++) {
       const d = new Date(); d.setDate(d.getDate() - i);
-      const iso = d.toISOString().split('T')[0];
+      const iso = localISO(d);
       if (state.habitCompletions[`${habit.id}_${iso}`]) streak++;
       else break;
     }
@@ -6667,7 +6673,7 @@ function renderDonePage() {
   const totalDone   = allDone.length;
   const todayCount  = allDone.filter(d => d.date === today).length;
   const weekAgo     = new Date(); weekAgo.setDate(weekAgo.getDate() - 7);
-  const weekIso     = weekAgo.toISOString().split('T')[0];
+  const weekIso     = localISO(weekAgo);
   const weekCount   = allDone.filter(d => d.date >= weekIso).length;
   const blocksDone  = new Set(allDone.filter(d => d.blockId).map(d => d.blockId)).size;
 
@@ -6923,7 +6929,7 @@ function renderNotifPage() {
 
     // Build upcoming tasks list (next 60 mins)
     const now = new Date();
-    const today = now.toISOString().split('T')[0];
+    const today = localISO(now);
     const nowMins = now.getHours() * 60 + now.getMinutes();
     const upcoming = [];
 
@@ -7122,7 +7128,7 @@ function calcMustStreak() {
   for (let d = 0; d < 365; d++) {
     const checkDate = new Date(today);
     checkDate.setDate(checkDate.getDate() - d);
-    const iso = checkDate.toISOString().split('T')[0];
+    const iso = localISO(checkDate);
 
     // Check if all MUST block actions that were scheduled that day were completed
     let allDone = true;
@@ -7155,14 +7161,14 @@ function renderPlanningMode() {
   const week  = [];
   for (let i = 0; i < 7; i++) {
     const d = new Date(); d.setDate(d.getDate() + i);
-    week.push(d.toISOString().split('T')[0]);
+    week.push(localISO(d));
   }
 
   // Last week summary
   const lastWeek = [];
   for (let i = 7; i < 14; i++) {
     const d = new Date(); d.setDate(d.getDate() - i);
-    lastWeek.push(d.toISOString().split('T')[0]);
+    lastWeek.push(localISO(d));
   }
   const lastWeekDone = Object.keys(state.actionCompletions).filter(k => {
     const parts = k.split('_');
