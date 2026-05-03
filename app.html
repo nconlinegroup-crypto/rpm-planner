@@ -1845,23 +1845,23 @@ body { display: flex; flex-direction: column; }
   <button class="mobile-nav-item" data-panel="today"><span class="mobile-nav-icon">📋</span>TODAY</button>
   <button class="mobile-nav-item" data-panel="blocks"><span class="mobile-nav-icon">⚡</span>BLOCKS</button>
   <button class="mobile-nav-item" data-panel="capture"><span class="mobile-nav-icon">💡</span>CAPTURE</button>
-  <button class="mobile-nav-item" id="mobileMoreBtn"><span class="mobile-nav-icon">⋯</span>MORE</button>
+  <button class="mobile-nav-item" id="mobileMoreBtn" onclick="window._openMorePanel()" style="touch-action:manipulation;"><span class="mobile-nav-icon">⋯</span>MORE</button>
 </div>
-<div class="mobile-more-overlay" id="mobileMoreOverlay"></div>
+<div class="mobile-more-overlay" id="mobileMoreOverlay" onclick="window._closeMorePanel()"></div>
 <div class="mobile-more-panel" id="mobileMorePanel">
   <div class="mobile-more-handle"></div>
   <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:var(--text-dim);margin-bottom:12px;">MORE PAGES</div>
   <div class="mobile-more-grid">
-    <button class="mobile-more-item" data-panel="week"><span>📅</span>WEEK</button>
-    <button class="mobile-more-item" data-panel="habits"><span>🔥</span>HABITS</button>
-    <button class="mobile-more-item" data-panel="wins"><span>🏆</span>WINS</button>
-    <button class="mobile-more-item" data-panel="done"><span>✅</span>DONE</button>
-    <button class="mobile-more-item" data-panel="review"><span>📊</span>REVIEW</button>
-    <button class="mobile-more-item" data-panel="wheel"><span>🎯</span>WHEEL</button>
-    <button class="mobile-more-item" data-panel="opa"><span>🔄</span>OPA</button>
-    <button class="mobile-more-item" data-panel="plan"><span>🗓</span>PLAN</button>
-    <button class="mobile-more-item" data-panel="notif"><span>🔔</span>NOTIF</button>
-    <button class="mobile-more-item" data-panel="export"><span>⬇</span>EXPORT</button>
+    <button class="mobile-more-item" data-panel="week" onclick="if(typeof switchTo==='function')switchTo('week');window._closeMorePanel();"><span>📅</span>WEEK</button>
+    <button class="mobile-more-item" data-panel="habits" onclick="if(typeof switchTo==='function')switchTo('habits');window._closeMorePanel();"><span>🔥</span>HABITS</button>
+    <button class="mobile-more-item" data-panel="wins" onclick="if(typeof switchTo==='function')switchTo('wins');window._closeMorePanel();"><span>🏆</span>WINS</button>
+    <button class="mobile-more-item" data-panel="done" onclick="if(typeof switchTo==='function')switchTo('done');window._closeMorePanel();"><span>✅</span>DONE</button>
+    <button class="mobile-more-item" data-panel="review" onclick="if(typeof switchTo==='function')switchTo('review');window._closeMorePanel();"><span>📊</span>REVIEW</button>
+    <button class="mobile-more-item" data-panel="wheel" onclick="if(typeof switchTo==='function')switchTo('wheel');window._closeMorePanel();"><span>🎯</span>WHEEL</button>
+    <button class="mobile-more-item" data-panel="opa" onclick="if(typeof switchTo==='function')switchTo('opa');window._closeMorePanel();"><span>🔄</span>OPA</button>
+    <button class="mobile-more-item" data-panel="plan" onclick="if(typeof switchTo==='function')switchTo('plan');window._closeMorePanel();"><span>🗓</span>PLAN</button>
+    <button class="mobile-more-item" data-panel="notif" onclick="if(typeof switchTo==='function')switchTo('notif');window._closeMorePanel();"><span>🔔</span>NOTIF</button>
+    <button class="mobile-more-item" data-panel="export" onclick="if(typeof switchTo==='function')switchTo('export');window._closeMorePanel();"><span>⬇</span>EXPORT</button>
   </div>
 </div>
 <!-- QUICK ADD TASK MODAL -->
@@ -1912,23 +1912,23 @@ body { display: flex; flex-direction: column; }
   <button class="mobile-nav-item" data-panel="today"><span class="mobile-nav-icon">📋</span>TODAY</button>
   <button class="mobile-nav-item" data-panel="blocks"><span class="mobile-nav-icon">⚡</span>BLOCKS</button>
   <button class="mobile-nav-item" data-panel="capture"><span class="mobile-nav-icon">💡</span>CAPTURE</button>
-  <button class="mobile-nav-item" id="mobileMoreBtn"><span class="mobile-nav-icon">⋯</span>MORE</button>
+  <button class="mobile-nav-item" id="mobileMoreBtn" onclick="window._openMorePanel()" style="touch-action:manipulation;"><span class="mobile-nav-icon">⋯</span>MORE</button>
 </div>
-<div class="mobile-more-overlay" id="mobileMoreOverlay"></div>
+<div class="mobile-more-overlay" id="mobileMoreOverlay" onclick="window._closeMorePanel()"></div>
 <div class="mobile-more-panel" id="mobileMorePanel">
   <div class="mobile-more-handle"></div>
   <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:var(--text-dim);margin-bottom:12px;">MORE PAGES</div>
   <div class="mobile-more-grid">
-    <button class="mobile-more-item" data-panel="week"><span>📅</span>WEEK</button>
-    <button class="mobile-more-item" data-panel="habits"><span>🔥</span>HABITS</button>
-    <button class="mobile-more-item" data-panel="wins"><span>🏆</span>WINS</button>
-    <button class="mobile-more-item" data-panel="done"><span>✅</span>DONE</button>
-    <button class="mobile-more-item" data-panel="review"><span>📊</span>REVIEW</button>
-    <button class="mobile-more-item" data-panel="wheel"><span>🎯</span>WHEEL</button>
-    <button class="mobile-more-item" data-panel="opa"><span>🔄</span>OPA</button>
-    <button class="mobile-more-item" data-panel="plan"><span>🗓</span>PLAN</button>
-    <button class="mobile-more-item" data-panel="notif"><span>🔔</span>NOTIF</button>
-    <button class="mobile-more-item" data-panel="export"><span>⬇</span>EXPORT</button>
+    <button class="mobile-more-item" data-panel="week" onclick="if(typeof switchTo==='function')switchTo('week');window._closeMorePanel();"><span>📅</span>WEEK</button>
+    <button class="mobile-more-item" data-panel="habits" onclick="if(typeof switchTo==='function')switchTo('habits');window._closeMorePanel();"><span>🔥</span>HABITS</button>
+    <button class="mobile-more-item" data-panel="wins" onclick="if(typeof switchTo==='function')switchTo('wins');window._closeMorePanel();"><span>🏆</span>WINS</button>
+    <button class="mobile-more-item" data-panel="done" onclick="if(typeof switchTo==='function')switchTo('done');window._closeMorePanel();"><span>✅</span>DONE</button>
+    <button class="mobile-more-item" data-panel="review" onclick="if(typeof switchTo==='function')switchTo('review');window._closeMorePanel();"><span>📊</span>REVIEW</button>
+    <button class="mobile-more-item" data-panel="wheel" onclick="if(typeof switchTo==='function')switchTo('wheel');window._closeMorePanel();"><span>🎯</span>WHEEL</button>
+    <button class="mobile-more-item" data-panel="opa" onclick="if(typeof switchTo==='function')switchTo('opa');window._closeMorePanel();"><span>🔄</span>OPA</button>
+    <button class="mobile-more-item" data-panel="plan" onclick="if(typeof switchTo==='function')switchTo('plan');window._closeMorePanel();"><span>🗓</span>PLAN</button>
+    <button class="mobile-more-item" data-panel="notif" onclick="if(typeof switchTo==='function')switchTo('notif');window._closeMorePanel();"><span>🔔</span>NOTIF</button>
+    <button class="mobile-more-item" data-panel="export" onclick="if(typeof switchTo==='function')switchTo('export');window._closeMorePanel();"><span>⬇</span>EXPORT</button>
   </div>
 </div>
 <!-- QUICK ADD TASK MODAL -->
@@ -1984,23 +1984,23 @@ body { display: flex; flex-direction: column; }
   <button class="mobile-nav-item" data-panel="today"><span class="mobile-nav-icon">📋</span>TODAY</button>
   <button class="mobile-nav-item" data-panel="blocks"><span class="mobile-nav-icon">⚡</span>BLOCKS</button>
   <button class="mobile-nav-item" data-panel="capture"><span class="mobile-nav-icon">💡</span>CAPTURE</button>
-  <button class="mobile-nav-item" id="mobileMoreBtn"><span class="mobile-nav-icon">⋯</span>MORE</button>
+  <button class="mobile-nav-item" id="mobileMoreBtn" onclick="window._openMorePanel()" style="touch-action:manipulation;"><span class="mobile-nav-icon">⋯</span>MORE</button>
 </div>
-<div class="mobile-more-overlay" id="mobileMoreOverlay"></div>
+<div class="mobile-more-overlay" id="mobileMoreOverlay" onclick="window._closeMorePanel()"></div>
 <div class="mobile-more-panel" id="mobileMorePanel">
   <div class="mobile-more-handle"></div>
   <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:var(--text-dim);margin-bottom:12px;">MORE PAGES</div>
   <div class="mobile-more-grid">
-    <button class="mobile-more-item" data-panel="week"><span>📅</span>WEEK</button>
-    <button class="mobile-more-item" data-panel="habits"><span>🔥</span>HABITS</button>
-    <button class="mobile-more-item" data-panel="wins"><span>🏆</span>WINS</button>
-    <button class="mobile-more-item" data-panel="done"><span>✅</span>DONE</button>
-    <button class="mobile-more-item" data-panel="review"><span>📊</span>REVIEW</button>
-    <button class="mobile-more-item" data-panel="wheel"><span>🎯</span>WHEEL</button>
-    <button class="mobile-more-item" data-panel="opa"><span>🔄</span>OPA</button>
-    <button class="mobile-more-item" data-panel="plan"><span>🗓</span>PLAN</button>
-    <button class="mobile-more-item" data-panel="notif"><span>🔔</span>NOTIF</button>
-    <button class="mobile-more-item" data-panel="export"><span>⬇</span>EXPORT</button>
+    <button class="mobile-more-item" data-panel="week" onclick="if(typeof switchTo==='function')switchTo('week');window._closeMorePanel();"><span>📅</span>WEEK</button>
+    <button class="mobile-more-item" data-panel="habits" onclick="if(typeof switchTo==='function')switchTo('habits');window._closeMorePanel();"><span>🔥</span>HABITS</button>
+    <button class="mobile-more-item" data-panel="wins" onclick="if(typeof switchTo==='function')switchTo('wins');window._closeMorePanel();"><span>🏆</span>WINS</button>
+    <button class="mobile-more-item" data-panel="done" onclick="if(typeof switchTo==='function')switchTo('done');window._closeMorePanel();"><span>✅</span>DONE</button>
+    <button class="mobile-more-item" data-panel="review" onclick="if(typeof switchTo==='function')switchTo('review');window._closeMorePanel();"><span>📊</span>REVIEW</button>
+    <button class="mobile-more-item" data-panel="wheel" onclick="if(typeof switchTo==='function')switchTo('wheel');window._closeMorePanel();"><span>🎯</span>WHEEL</button>
+    <button class="mobile-more-item" data-panel="opa" onclick="if(typeof switchTo==='function')switchTo('opa');window._closeMorePanel();"><span>🔄</span>OPA</button>
+    <button class="mobile-more-item" data-panel="plan" onclick="if(typeof switchTo==='function')switchTo('plan');window._closeMorePanel();"><span>🗓</span>PLAN</button>
+    <button class="mobile-more-item" data-panel="notif" onclick="if(typeof switchTo==='function')switchTo('notif');window._closeMorePanel();"><span>🔔</span>NOTIF</button>
+    <button class="mobile-more-item" data-panel="export" onclick="if(typeof switchTo==='function')switchTo('export');window._closeMorePanel();"><span>⬇</span>EXPORT</button>
   </div>
 </div>
 
@@ -2050,23 +2050,23 @@ body { display: flex; flex-direction: column; }
   <button class="mobile-nav-item" data-panel="today"><span class="mobile-nav-icon">📋</span>TODAY</button>
   <button class="mobile-nav-item" data-panel="blocks"><span class="mobile-nav-icon">⚡</span>BLOCKS</button>
   <button class="mobile-nav-item" data-panel="capture"><span class="mobile-nav-icon">💡</span>CAPTURE</button>
-  <button class="mobile-nav-item" id="mobileMoreBtn"><span class="mobile-nav-icon">⋯</span>MORE</button>
+  <button class="mobile-nav-item" id="mobileMoreBtn" onclick="window._openMorePanel()" style="touch-action:manipulation;"><span class="mobile-nav-icon">⋯</span>MORE</button>
 </div>
-<div class="mobile-more-overlay" id="mobileMoreOverlay"></div>
+<div class="mobile-more-overlay" id="mobileMoreOverlay" onclick="window._closeMorePanel()"></div>
 <div class="mobile-more-panel" id="mobileMorePanel">
   <div class="mobile-more-handle"></div>
   <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:var(--text-dim);margin-bottom:12px;">MORE PAGES</div>
   <div class="mobile-more-grid">
-    <button class="mobile-more-item" data-panel="week"><span>📅</span>WEEK</button>
-    <button class="mobile-more-item" data-panel="habits"><span>🔥</span>HABITS</button>
-    <button class="mobile-more-item" data-panel="wins"><span>🏆</span>WINS</button>
-    <button class="mobile-more-item" data-panel="done"><span>✅</span>DONE</button>
-    <button class="mobile-more-item" data-panel="review"><span>📊</span>REVIEW</button>
-    <button class="mobile-more-item" data-panel="wheel"><span>🎯</span>WHEEL</button>
-    <button class="mobile-more-item" data-panel="opa"><span>🔄</span>OPA</button>
-    <button class="mobile-more-item" data-panel="plan"><span>🗓</span>PLAN</button>
-    <button class="mobile-more-item" data-panel="notif"><span>🔔</span>NOTIF</button>
-    <button class="mobile-more-item" data-panel="export"><span>⬇</span>EXPORT</button>
+    <button class="mobile-more-item" data-panel="week" onclick="if(typeof switchTo==='function')switchTo('week');window._closeMorePanel();"><span>📅</span>WEEK</button>
+    <button class="mobile-more-item" data-panel="habits" onclick="if(typeof switchTo==='function')switchTo('habits');window._closeMorePanel();"><span>🔥</span>HABITS</button>
+    <button class="mobile-more-item" data-panel="wins" onclick="if(typeof switchTo==='function')switchTo('wins');window._closeMorePanel();"><span>🏆</span>WINS</button>
+    <button class="mobile-more-item" data-panel="done" onclick="if(typeof switchTo==='function')switchTo('done');window._closeMorePanel();"><span>✅</span>DONE</button>
+    <button class="mobile-more-item" data-panel="review" onclick="if(typeof switchTo==='function')switchTo('review');window._closeMorePanel();"><span>📊</span>REVIEW</button>
+    <button class="mobile-more-item" data-panel="wheel" onclick="if(typeof switchTo==='function')switchTo('wheel');window._closeMorePanel();"><span>🎯</span>WHEEL</button>
+    <button class="mobile-more-item" data-panel="opa" onclick="if(typeof switchTo==='function')switchTo('opa');window._closeMorePanel();"><span>🔄</span>OPA</button>
+    <button class="mobile-more-item" data-panel="plan" onclick="if(typeof switchTo==='function')switchTo('plan');window._closeMorePanel();"><span>🗓</span>PLAN</button>
+    <button class="mobile-more-item" data-panel="notif" onclick="if(typeof switchTo==='function')switchTo('notif');window._closeMorePanel();"><span>🔔</span>NOTIF</button>
+    <button class="mobile-more-item" data-panel="export" onclick="if(typeof switchTo==='function')switchTo('export');window._closeMorePanel();"><span>⬇</span>EXPORT</button>
   </div>
 </div>
 <script>
