@@ -22,6 +22,7 @@
 
 
 
+
 /* ── DARK THEME ─────────────────────────────────────────────────────────────── */
 :root {
   --bg: #0d0d0f; --bg2: #161619; --bg3: #1e1e24; --border: #2e2e3a;
@@ -1203,6 +1204,7 @@ body { display: flex; flex-direction: column; }
 
 
 
+
 </style>
 </head>
 <body class="fullpage-mode">
@@ -2081,6 +2083,7 @@ body { display: flex; flex-direction: column; }
 
 
 
+
 // ── PWA SHIM: localStorage replaces chrome.storage.local ─────────────────────
 const pwaStorage = {
   set(obj, cb) {
@@ -2319,11 +2322,18 @@ if ('Notification' in window && Notification.permission === 'default') {
 // Bind gist sync when DOM ready
 document.addEventListener("DOMContentLoaded", function() {
   if(typeof bindGistSync==="function") bindGistSync();
-  // Auto-pull on load if configured
+  // Auto-pull on load if configured - skip if recent local changes
   const { token, gistId } = gistGetCredentials();
   if (token && gistId) {
-    console.log('[AutoSync PWA] Auto-pulling on load...');
-    gistPull().catch(e => console.log('[AutoSync PWA] Auto-pull failed:', e.message));
+    const lastSave = parseInt(localStorage.getItem('rpm_rpmLastSaveTime') || '0');
+    const now = Date.now();
+    if (now - lastSave < 5 * 60 * 1000) {
+      console.log('[AutoSync PWA] Local changes detected — pushing instead of pulling');
+      gistPush().catch(e => console.log('[AutoSync PWA] Auto-push failed:', e.message));
+    } else {
+      console.log('[AutoSync PWA] Auto-pulling on load...');
+      gistPull().catch(e => console.log('[AutoSync PWA] Auto-pull failed:', e.message));
+    }
   }
 
 
@@ -2361,8 +2371,10 @@ window._pwaGistPull = gistPull;
 
 
 
+
 </script>
 <script>
+
 // ─────────────────────────────────────────────────────────────────────────────
 // RPM PLANNER v3 — app.js
 // Actions are now objects: { text, due, repeat, outcomeLabel, outcomeTarget }
@@ -7646,8 +7658,10 @@ load(()=>{
   });
 });
 
+
 </script>
 <script>
+
 
 
 
@@ -7743,6 +7757,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Enter') qatSave?.click();
   });
 });
+
 
 
 
